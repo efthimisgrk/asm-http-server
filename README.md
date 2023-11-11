@@ -1,6 +1,6 @@
 # asm-http-server
 
-Creating a basic HTTP web server in x86_64 assembly using the Intel syntax. It forks and handles both GET and POST HTTP requests and does some simple file I/O.
+A simple HTTP web server written in x86 assembly (Intel syntax) during the pwn.college journey. It forks and handles both GET and POST HTTP requests, and does some simple file I/O.
 
 **GET** searches the filesystem for the file specified in the URL path. If it finds it, it returns its contents in the response. If not, it returns nothing.
 
@@ -8,19 +8,25 @@ Creating a basic HTTP web server in x86_64 assembly using the Intel syntax. It f
 
 #### Disclaimer
 
-It's low-level, messy, and definitely not safe.
+It's low-level, messy, and definitely not secure.
 
 #### Usage
 
 Assemble it:
 
 ```
-as server.s -o server.o
+as ./server.s -o ./server.o
 ```
 
 Link the object file:
 ```
-ld server.o -o server
+ld ./server.o -o ./server
 ```
 
-Run it (you may need root privileges).
+Set the `CAP_NET_BIND_SERVICE` capability to bind to TCP port 80:
+
+```
+sudo setcap 'cap_net_bind_service=+ep' ./server
+```
+
+Run the web server `./server` and visit `http://127.0.0.1/`.
